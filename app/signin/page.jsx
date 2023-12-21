@@ -1,12 +1,58 @@
 "use client";
+// OTPPage.jsx
+import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-
+import { useRouter } from "next/router";
 import { cn } from "@/lib/utils";
-import { buttonVariants } from "@/components/ui/button";
-import UserAuthForm from "../components/UserAuthForm";
+import { buttonVariants } from "@/components/ui/button"; // Make sure to import necessary components
+import { Button } from "@/components/ui/button";
+import { toast } from "react-toastify";
 
-export default function AuthenticationPage() {
+export default function OTPPage() {
+  const [otp, setOtp] = useState(["", "", "", ""]);
+
+  const handleInputChange = (index, value) => {
+    const newOtp = [...otp];
+    newOtp[index] = value;
+    setOtp(newOtp);
+  };
+
+  const handleVerify = async () => {
+    const enteredOtp = otp.join("");
+    const apiEndpoint = "https://system.hajirapp.com/api/employer/verify-opt";
+
+    try {
+      const response = await fetch(apiEndpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ otp: enteredOtp }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const data = await response.json();
+
+      if (data.status === "success") {
+        // Use react-toastify to show success message
+        toast.success(
+          "OTP verification successful! Redirecting to dashboard..."
+        );
+        router.push("/dashboard");
+      } else {
+        // Use react-toastify to show error message
+        toast.error(`OTP verification failed. Message: ${data.message}`);
+      }
+    } catch (error) {
+      // Use react-toastify to show a generic error message
+      toast.error(`Error during OTP verification: ${error.message}`);
+    }
+  };
+
   return (
     <>
       <div className="md:hidden">
@@ -50,48 +96,50 @@ export default function AuthenticationPage() {
             >
               <path d="M15 6v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3" />
             </svg>
-            Acme Inc
+            HAJIR
           </div>
           <div className="relative z-20 mt-auto">
             <blockquote className="space-y-2">
               <p className="text-lg">
-                &ldquo;This library has saved me countless hours of work and
-                helped me deliver stunning designs to my clients faster than
-                ever before.&rdquo;
+                A modern attendance system for smart people.
               </p>
-              <footer className="text-sm">Sofia Davis</footer>
+              <footer className="text-sm">
+                @Copyright 2023 © www.hajirapp.com
+              </footer>
             </blockquote>
           </div>
         </div>
-        <div className="lg:p-8">
-          <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
-            <div className="flex flex-col space-y-2 text-center">
-              <h1 className="text-2xl font-semibold tracking-tight">
-                Welcome to your Hajir account
-              </h1>
-              <p className="text-sm text-muted-foreground">
-                Enter your number below to signin
-              </p>
-            </div>
-            <UserAuthForm />
-            <p className="px-8 text-center text-sm text-muted-foreground">
-              By clicking continue, you agree to our{" "}
-              <Link
-                href="/terms"
-                className="underline underline-offset-4 hover:text-primary"
-              >
-                Terms of Service
-              </Link>{" "}
-              and{" "}
-              <Link
-                href="/privacy"
-                className="underline underline-offset-4 hover:text-primary"
-              >
-                Privacy Policy
-              </Link>
-              .
+        <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
+          <div className="flex flex-col space-y-2 text-center">
+            <h1 className="text-2xl font-semibold tracking-tight">Enter OTP</h1>
+            <p className="text-sm text-muted-foreground">
+              Enter the one-time password sent to your mobile number
             </p>
           </div>
+
+          {/* OTP input boxes */}
+          <div className="flex space-x-4">
+            {otp.map((digit, index) => (
+              <input
+                key={index}
+                type="text"
+                maxLength="1"
+                value={digit}
+                onChange={(e) => handleInputChange(index, e.target.value)}
+                className="w-12 h-12 text-center border rounded-md"
+              />
+            ))}
+          </div>
+
+          {/* Verify button */}
+          <Link href="/dashboard">
+            <Button onClick={handleVerify}>Verify</Button>
+          </Link>
+
+          <p className="px-8 text-center text-sm text-muted-foreground">
+            <span className="font-bold">Resend OTP</span> |{" "}
+            <span className="font-bold">Change Number</span>
+          </p>
         </div>
       </div>
     </>
