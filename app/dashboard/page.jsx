@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import Link from "next/link";
 
 const Page = () => {
   return (
@@ -14,8 +15,8 @@ const Page = () => {
         <h3 className="text-4xl font-bold mb-4 text-black">
           You have not created a company yet.
         </h3>
-        <Button className="bg-blue-500 text-white px-6 py-2 rounded-full">
-          Create A Company
+        <Button asChild>
+          <Link href="/dashboard/company/createcompany"> Create A Company</Link>
         </Button>
       </div>
     </div>
