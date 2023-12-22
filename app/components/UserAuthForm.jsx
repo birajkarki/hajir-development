@@ -5,18 +5,18 @@ import { cn } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 
 const UserAuthForm = ({ onSubmit, className, ...props }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter();
+  // const router = useRouter();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setIsLoading(true);
 
-    // Assume that the phone number is retrieved from the input with the id "number"
-    const phoneNumber = event.target.number.value;
+    // Updated: Access the value using event.target.number.value
+    const phoneNumber = event.target.phoneNumber;
 
     try {
       await onSubmit(phoneNumber);
@@ -35,16 +35,21 @@ const UserAuthForm = ({ onSubmit, className, ...props }) => {
             <Label className="sr-only" htmlFor="number">
               Phone Number
             </Label>
+            {/* Updated: Add id and name attributes */}
             <Input
               id="number"
+              name="number"
               placeholder="+977 9841234567"
               type="number"
               disabled={isLoading}
             />
           </div>
+          {/* <Button onClick type="button" disabled={isLoading}>
+            Login
+          </Button> */}
           <Button
-            type="button"
-            onClick={() => router.push("/signin")}
+            type="submit"
+            // onClick={() => router.push("/signin")}
             disabled={isLoading}
           >
             {isLoading && null}

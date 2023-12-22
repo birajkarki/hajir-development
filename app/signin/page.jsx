@@ -24,8 +24,11 @@ export default function OTPPage() {
 
     try {
       const response = await fetch(apiEndpoint, {
+        mode: "no-cors",
+
         method: "POST",
         headers: {
+          accept: "application/json",
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ otp: enteredOtp }),

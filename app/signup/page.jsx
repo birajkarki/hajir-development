@@ -13,7 +13,7 @@ export default function AuthenticationPage() {
   const handleApiRequest = async (phoneNumber) => {
     try {
       const apiResponse = await fetch(
-        "https://system.hajirapp.com/api/employer/register",
+        "https://attendance.an4soft.com/api/employer/register",
         {
           method: "POST",
           headers: {
