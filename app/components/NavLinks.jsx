@@ -14,6 +14,17 @@ import { usePathname } from "next/navigation";
 const links = [
   { name: "Dashboard", href: "/dashboard", icon: HomeIcon },
   {
+    name: "Company ",
+    href: "/dashboard/company",
+    icon: DocumentDuplicateIcon,
+  },
+  {
+    name: "Employee",
+    href: "/dashboard/enroll-attendance",
+    icon: DocumentDuplicateIcon,
+  },
+
+  {
     name: "Profile",
     href: "/dashboard/profile",
     icon: DocumentDuplicateIcon,
@@ -23,16 +34,7 @@ const links = [
     href: "/dashboard/reports",
     icon: DocumentDuplicateIcon,
   },
-  {
-    name: "Enroll Attendance",
-    href: "/dashboard/enroll-attendance",
-    icon: DocumentDuplicateIcon,
-  },
-  {
-    name: "Missing Attendance",
-    href: "/dashboard/missing-attendance",
-    icon: DocumentDuplicateIcon,
-  },
+
   { name: "Setting", href: "/dashboard/settings", icon: UserGroupIcon },
 ];
 

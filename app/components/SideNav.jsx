@@ -1,38 +1,3 @@
-// import Image from "next/image";
-// import React from "react";
-
-// const Sidebar = () => {
-//   return (
-//     <div className="bg-amber-400 ">
-//       <Image
-//         src="/logo.svg"
-//         width={100}
-//         height={100}
-//         alt="Picture of the author"
-//       />
-//       <br />
-//       <div className="flex items-center justify-between bg-gray-200 p-4">
-//         <div className="flex items-center">
-//           <div className="w-12 h-12 bg-gray-500 rounded-full overflow-hidden">
-//             <Image
-//               src="/logo.svg"
-//               width={100}
-//               height={100}
-//               alt="Picture of the author"
-//             />
-//           </div>
-//           {/* User information */}
-//           <div className="ml-4">
-//             <p className="font-bold text-lg">Biraj Karki</p>
-//             <p className="text-gray-600">birajkarki98@gmail.com</p>
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default Sidebar;
 import Link from "next/link";
 import { PowerIcon } from "@heroicons/react/24/outline";
 import NavLinks from "./NavLinks";
@@ -40,7 +5,7 @@ import Image from "next/image";
 
 export default function SideNav() {
   return (
-    <div className="flex h-full flex-col px-3 py-4 md:px-2">
+    <div className="fixed h-full flex flex-col px-3 py-4 md:px-2">
       <Link
         className="mb-2 flex h-20 items-end justify-start rounded-md bg-blue-600 p-4 md:h-40"
         href="/"
