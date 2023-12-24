@@ -30,19 +30,15 @@ export default function AuthenticationPage() {
       const data = await apiResponse.json();
       setResponse(data);
 
-      // Handle the specific structure of the response
       if (data.status === "success") {
         console.log("Successfully Registered. OTP Sent Successfully");
         console.log("OTP:", data.data.otp);
         console.log("Token:", data.data.token);
-        // Optionally, you can navigate to a success page or perform additional actions
       } else {
         console.error("Registration failed. Message:", data.message);
-        // Optionally, you can display an error message to the user
       }
     } catch (error) {
       console.error("Error during API request:", error.message);
-      // Optionally, you can display a generic error message to the user
     }
   };
 
