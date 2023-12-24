@@ -1,5 +1,5 @@
-import LeftCreateCompany from "@/app/components/LeftCreateCompany";
-import RightCreateCompany from "@/app/components/RightCreateCompany";
+import LeftCreateCompany from "@/app/components/createCompany/LeftCreateCompany";
+import RightCreateCompany from "@/app/components/createCompany/RightCreateCompany";
 import React from "react";
 
 const Page = () => {
