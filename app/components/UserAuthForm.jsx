@@ -1,59 +1,77 @@
-// UserAuthForm.jsx
 "use client";
+import Link from "next/link";
 import React, { useState } from "react";
-import { cn } from "@/lib/utils";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import { toast } from "react-hot-toast";
 
-const UserAuthForm = ({ onSubmit, className, ...props }) => {
-  const [isLoading, setIsLoading] = useState(false);
+export default function LoginPage() {
   const router = useRouter();
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [buttonDisabled, setButtonDisabled] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    setIsLoading(true);
-
-    // Assume that the phone number is retrieved from the input with the id "number"
-    const phoneNumber = event.target.number.value;
-
+  const onSubmit = async () => {
     try {
-      await onSubmit(phoneNumber);
+      setLoading(true);
+
+      const response = await fetch(
+        "https://system.hajirapp.com/api/employer/register",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            phone: phoneNumber,
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`Registration failed: ${response.statusText}`);
+      }
+
+      const responseData = await response.json();
+
+      console.log("Registration success", responseData);
+      toast.success("Registration success");
+
+      // Log the OTP response directly in the console
+      console.log("OTP:", responseData.data.otp);
+      console.log("Token:", responseData.data.token);
+
+      // You can handle further logic here based on the response
     } catch (error) {
-      console.error("Error during API request:", error.message);
+      console.error("Registration failed", error.message);
+      toast.error(error.message);
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
   };
 
   return (
-    <div className={cn("grid gap-6", className)} {...props}>
-      <form onSubmit={handleSubmit}>
-        <div className="grid gap-2">
-          <div className="grid gap-1">
-            <Label className="sr-only" htmlFor="number">
-              Phone Number
-            </Label>
-            <Input
-              id="number"
-              placeholder="+977 9841234567"
-              type="number"
-              disabled={isLoading}
-            />
-          </div>
-          <Button
-            type="button"
-            onClick={() => router.push("/signin")}
-            disabled={isLoading}
-          >
-            {isLoading && null}
-            Login
-          </Button>
-        </div>
-      </form>
+    <div className="flex flex-col items-center justify-center min-h-screen py-2">
+      <h1>{loading ? "Processing" : "Register"}</h1>
+      <hr />
+
+      <label htmlFor="phoneNumber">Phone Number</label>
+      <input
+        className="p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600 text-black"
+        id="phoneNumber"
+        type="tel"
+        value={phoneNumber}
+        onChange={(e) => setPhoneNumber(e.target.value)}
+        placeholder="Phone Number"
+      />
+
+      <button
+        onClick={onSubmit}
+        disabled={buttonDisabled || loading}
+        className="p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600"
+      >
+        {loading ? "Processing" : "Submit Phone Number"}
+      </button>
+      {/* <Link href="/signup">Visit Signup page</Link> */}
     </div>
   );
-};
-
-export default UserAuthForm;
+}
