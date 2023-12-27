@@ -4,11 +4,14 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
 
+// Import statements...
+
 export default function LoginPage() {
   const router = useRouter();
   const [phoneNumber, setPhoneNumber] = useState("");
   const [buttonDisabled, setButtonDisabled] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [responseData, setResponseData] = useState(null);
 
   const onSubmit = async () => {
     try {
@@ -31,7 +34,7 @@ export default function LoginPage() {
         throw new Error(`Registration failed: ${response.statusText}`);
       }
 
-      const responseData = await response.json();
+      const responseData = await response.json(); // Use a different variable name to avoid conflict
 
       console.log("Registration success", responseData);
       toast.success("Registration success");
@@ -39,6 +42,9 @@ export default function LoginPage() {
       // Log the OTP response directly in the console
       console.log("OTP:", responseData.data.otp);
       console.log("Token:", responseData.data.token);
+
+      // Set responseData to state
+      setResponseData(responseData);
 
       // You can handle further logic here based on the response
     } catch (error) {
@@ -63,13 +69,23 @@ export default function LoginPage() {
         onChange={(e) => setPhoneNumber(e.target.value)}
         placeholder="Phone Number"
       />
-
+      {loading ? (
+        <p>Processing...</p>
+      ) : (
+        responseData && <p>OTP: {responseData.data.otp}</p>
+      )}
       <button
         onClick={onSubmit}
         disabled={buttonDisabled || loading}
         className="p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600"
       >
         {loading ? "Processing" : "Submit Phone Number"}
+      </button>
+      <button
+        onClick={() => router.push("/otp")}
+        className="p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600"
+      >
+        Go to otp page
       </button>
       {/* <Link href="/signup">Visit Signup page</Link> */}
     </div>
